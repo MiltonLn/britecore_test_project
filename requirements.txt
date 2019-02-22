@@ -1,0 +1,7 @@
+python-dotenv==0.10.1
+
+Django==2.1.7
+djangorestframework==3.9.1
+psycopg2==2.7.6
+
+coverage==4.2
