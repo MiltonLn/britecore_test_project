@@ -26,6 +26,8 @@ REPO_DIR = os.path.dirname(BASE_DIR)
 ENV_DIR = os.path.join(BASE_DIR, 'env')
 ENV_SECRETS_FILE = os.path.join(ENV_DIR, 'secrets.env')
 ENV_SETTINGS_FILE = os.path.join(ENV_DIR, f'{BRITECORE_ENV.lower()}.env')
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+FRONTEND_DIR = os.path.join(REPO_DIR, 'frontend')
 
 
 # Envs
@@ -54,8 +56,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'webpack_loader',
+    'django_pdb',
 
-    'risk_types'
+    'risk_types',
+    'risks'
 ]
 
 MIDDLEWARE = [
@@ -71,7 +76,10 @@ MIDDLEWARE = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            TEMPLATES_DIR,
+            os.path.join(FRONTEND_DIR, 'public')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -140,5 +148,21 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
+    os.path.join(FRONTEND_DIR, "dist"),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
+
+
+# Application Settings
+# ------------------------------------------------------------------------------
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': '',
+        'STATS_FILE': os.path.join(FRONTEND_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': ['.+\.hot-update.js', '.+\.map']
+    }
+}
