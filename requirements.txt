@@ -1,7 +1,9 @@
-python-dotenv==0.10.1
-
 Django==2.1.7
 djangorestframework==3.9.1
 psycopg2==2.7.6
+psycopg2-binary==2.7.7
+django-webpack-loader==0.6.0
 
 coverage==4.2
+python-dotenv==0.10.1
+psycopg2-binary==2.7.7
