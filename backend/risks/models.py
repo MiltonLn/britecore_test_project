@@ -11,3 +11,13 @@ class Risk(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     risk_type = models.ForeignKey(RiskType, on_delete=models.CASCADE)
     field_values = JSONField()
+
+    @property
+    def risk_type_name(self):
+        return self.risk_type.name
+
+    def __repr__(self):
+        return f'{self.risk_type} ({field_values})'
+
+    def __str__(self):
+        return f'{self.risk_type} ({field_values})'

@@ -29,7 +29,7 @@ class RiskAPITests(APITestCase):
             'risk_type': str(self.risk_type.id),
             'field_values': {
                 'string_field': 'Some string',
-                'number_field': 144,
+                'number_field': "144",
                 'date_field': str(timezone.now()),
                 'choice_field': 'option1'
             }
@@ -46,13 +46,13 @@ class RiskAPITests(APITestCase):
         data = {
             'risk_type': str(self.risk_type.id),
             'field_values': {
-                'string_field': 24,  # This is not valid since it should be a string
-                'number_field': 144,
+                'string_field': "Hello",
+                'number_field': "a string", # This is not valid since it should be a number
                 'date_field': timezone.now(),
                 'choice_field': 'option1'
             }
         }
-        error_msg = '"24" is not a valid "STRING"'
+        error_msg = '"a string" is not a valid "NUMBER"'
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Risk.objects.count(), 0)
@@ -65,8 +65,8 @@ class RiskAPITests(APITestCase):
         data = {
             'risk_type': str(self.risk_type.id),
             'field_values': {
-                'string_field': 24,
-                'number_field': 144,
+                'string_field': "Hello",
+                'number_field': "144",
                 'date_field': timezone.now(),
                 'choice_field': 'Wrong option'  # This is not a valid option
             }
@@ -83,7 +83,7 @@ class RiskAPITests(APITestCase):
             risk_type=self.risk_type,
             field_values={
                 'string_field': 'Some string',
-                'number_field': 144,
+                'number_field': "144",
                 'date_field': str(timezone.now()),
                 'choice_field': 'option1'
             }
@@ -92,7 +92,7 @@ class RiskAPITests(APITestCase):
             'risk_type': str(self.risk_type.id),
             'field_values': {
                 'string_field': 'Another string',
-                'number_field': 25,
+                'number_field': "25",
                 'date_field': str(timezone.now()),
                 'choice_field': 'option2'
             }
@@ -109,7 +109,7 @@ class RiskAPITests(APITestCase):
             risk_type=self.risk_type,
             field_values={
                 'string_field': 'Some string',
-                'number_field': 144,
+                'number_field': "144",
                 'date_field': str(timezone.now()),
                 'choice_field': 'option1'
             }
@@ -119,19 +119,19 @@ class RiskAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertDictEqual(response.data['field_values'], risk.field_values)
 
-    def test_read_risk_type_not_found(self):
+    def test_read_risk_not_found(self):
         """Test the API gives the correct response when a Risk isn't found"""
         url = reverse('risk-detail', kwargs={'pk': "anything"})
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    def test_list_risks_types(self):
+    def test_list_risks(self):
         """Test getting all Risks work properly"""
         risk1 = Risk.objects.create(
             risk_type=self.risk_type,
             field_values={
                 'string_field': 'Some string',
-                'number_field': 144,
+                'number_field': "144",
                 'date_field': str(timezone.now()),
                 'choice_field': 'option1'
             }
@@ -140,7 +140,7 @@ class RiskAPITests(APITestCase):
             risk_type=self.risk_type,
             field_values={
                 'string_field': 'Another string',
-                'number_field': 5,
+                'number_field': "5",
                 'date_field': str(timezone.now()),
                 'choice_field': 'option3'
             }
@@ -156,3 +156,19 @@ class RiskAPITests(APITestCase):
             response.data[1]['field_values'],
             risk2.field_values
         )
+
+    def test_delete_risk(self):
+        """Test we can successfully delete a Risk"""
+        risk = Risk.objects.create(
+            risk_type=self.risk_type,
+            field_values={
+                'string_field': 'Some string',
+                'number_field': "144",
+                'date_field': str(timezone.now()),
+                'choice_field': 'option1'
+            }
+        )
+        url = reverse('risk-detail', kwargs={'pk': risk.id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Risk.objects.count(), 0)

@@ -135,3 +135,16 @@ class RiskTypeAPITests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data[0]['name'], risk_type1.name)
         self.assertEqual(response.data[1]['name'], risk_type2.name)
+
+    def test_delete_risk(self):
+        """Test we can successfully delete a RiskType"""
+        risk_type = RiskType.objects.create(
+            name='RiskType1',
+            fields_type={
+                'field1': 'STRING'
+            }
+        )
+        url = reverse('risktype-detail', kwargs={'pk': risk_type.id})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(RiskType.objects.count(), 0)

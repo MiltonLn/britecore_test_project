@@ -7,13 +7,13 @@ from .models import Risk
 class RiskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Risk
-        fields = ['id', 'risk_type', 'field_values']
+        fields = ['id', 'risk_type', 'risk_type_name', 'field_values']
 
     def has_correct_fields(self, fields, mandatory_fields):
         return set(fields) == set(mandatory_fields)
 
     def validate(self, data):
-        """Validate that field_values has the right fields with the right types"""
+        """Validate that field_values has the rpight fields with the right types"""
         field_values = data['field_values']
         mandatory_fields = data['risk_type'].fields_type
 
@@ -36,7 +36,7 @@ class RiskSerializer(serializers.ModelSerializer):
                 )
 
             if not type_is_enum\
-               and type(field_value) != SupportedTypes.get_type(field_type):
+               and not SupportedTypes.check_valid_type(field_value, field_type):
                 raise serializers.ValidationError(
                     f'"{field_value}" is not a valid "{field_type}"'
                 )

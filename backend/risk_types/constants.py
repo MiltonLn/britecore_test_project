@@ -1,8 +1,10 @@
+from decimal import Decimal
+
+
 class SupportedTypes:
     ENUM = list
     STRING = str
-    # This would be better as a decimal, but for simplicity let's keep it as int
-    NUMBER = int
+    NUMBER = Decimal
     # We could validate this as a datetime, but we don't want to deal with
     # formats right now, so, let's keep it simple
     DATE = str
@@ -12,5 +14,10 @@ class SupportedTypes:
         return ['STRING', 'NUMBER', 'DATE']
 
     @classmethod
-    def get_type(cls, type):
-        return getattr(cls, type, None)
+    def check_valid_type(cls, value, field_type):
+        type_to_cast = getattr(cls, field_type, None)
+        try:
+            type_to_cast(value)
+            return True
+        except Exception:
+            return False
