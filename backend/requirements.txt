@@ -7,3 +7,4 @@ django-webpack-loader==0.6.0
 coverage==4.2
 python-dotenv==0.10.1
 psycopg2-binary==2.7.7
+django-pdb==0.6.2

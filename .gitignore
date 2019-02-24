@@ -101,7 +101,11 @@ venv.bak/
 .mypy_cache/
 
 # Secrets file
-env/secrets.env
+backend/env/secrets.env
 
 # VScode stuff
 .vscode/
+
+# Frontend
+frontend/node_modules/
+frontend/webpack-stats.json
