@@ -1,7 +1,7 @@
 const BundleTracker = require("webpack-bundle-tracker");
 
 module.exports = {
-  publicPath: "http://0.0.0.0:8080/",
+  publicPath: process.env.VUE_APP_PUBLIC_PATH,
   outputDir: "./dist/",
   chainWebpack: config => {
     config.optimization.splitChunks(false);
@@ -13,7 +13,7 @@ module.exports = {
     config.resolve.alias.set("__STATIC__", "static");
 
     config.devServer
-      .public("http://0.0.0.0:8080")
+      .public(process.env.VUE_APP_PUBLIC_PATH)
       .host("0.0.0.0")
       .port(8080)
       .hotOnly(true)
