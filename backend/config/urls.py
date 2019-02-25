@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import path, include
 from django.views.generic import TemplateView
 from rest_framework import routers
