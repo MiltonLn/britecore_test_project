@@ -26,5 +26,5 @@ gunicorn ${DJANGO_WSGI_MODULE}\
 	--user=$USER\
 	--bind=unix:$SOCKET_FILE\
 	--log-level=debug\
-	--log-file=-
+	--log-file=gunicorn.log
 
