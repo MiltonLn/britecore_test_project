@@ -15,6 +15,7 @@ cd $DJANGO_DIR
 source venv/bin/activate
 export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
 export PYTHONPATH=$DJANGO_DIR:$PYTHONPATH
+export BRITECORE_ENV=PROD
 
 RUN_DIR=$(dirname $SOCKET_FILE)
 test -d $RUN_DIR || mkdir -p $RUN_DIR
