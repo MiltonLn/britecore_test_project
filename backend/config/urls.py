@@ -14,3 +14,11 @@ urlpatterns = [
     path('', TemplateView.as_view(template_name="index.html"), name='app'),
     path('api/', include(router.urls)),
 ]
+
+
+if settings.DEBUG:
+    import os
+    from django.conf.urls.static import static
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+    urlpatterns += staticfiles_urlpatterns() # tell gunicorn where static files are in dev mode
